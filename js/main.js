@@ -284,8 +284,8 @@ let favSchedule = ()=>{
 
 }
 
-let dbPromise = idb.open('football', 1, upgradeDB => {
-    if(!upgradeDB.objectStoreNames.contains('teams')){
-        upgradeDB.createObjectStore('teams')
+let dbPromise = idb.open('pwafootball', 1, upgradeDB => {
+    if(!upgradeDB.objectStoreNames.contains('match')){
+        upgradeDB.createObjectStore('match')
     }
 });
