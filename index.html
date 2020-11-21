@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#ff5722">
+	<meta name="description" content="PWA Football Club, Dicoding Academy">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<link rel="apple-touch-icon" href="icon192.png">
+	<title>PWA FC</title>
+	<link rel="manifest" href="manifest.json">
+	<link rel="icon" href="favicon.ico" sizes="256x256" type="image/png">
+	<link rel="preconnect" href="https://crests.football-data.org">
+	<link rel="preconnect" href="https://api.football-data.org">
+	<link rel="stylesheet" href="fonts/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="iconfont/material-icons.css">
+	<link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+<!-- Navigasi -->
+<div class="navbar-fixed">
+	<nav class="deep-orange">
+		<div class="nav-wrapper container">
+			<a href="#" class="brand-logo">PWA FC</a>
+			<a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+			<ul class="topnav right hide-on-med-and-down"></ul>
+		</div>
+	</nav>
+</div>
+<ul class="sidenav" id="nav-mobile"></ul>
+<!-- end navigasi -->
+<!-- content -->
+<div class="container" id="body-content">
+	<h1 class="header center-align" id="title"></h1>
+	<div class="row">
+		<div class="center-align" id="loader"></div>
+		<div class="col s12 m12" id="main-content"></div>
+	</div>
+</div>
+<!-- end content -->
+<footer class="page-footer  deep-orange darken-1">
+	<div class="center-align">
+		&copy; 2020 Nur Ikhsan
+	</div>
+</footer>
+<!-- script js -->
+<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+<script type="text/javascript" src="js/idb.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script src="js/sw-register.js"></script>
+<noscript>Your browser does not support JavaScript!</noscript>
+</body>
+</html>
