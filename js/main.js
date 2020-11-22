@@ -333,7 +333,7 @@ const pushNotification = msg => {
     const title = 'Notifikasi';
     const options = {
         body: msg,
-        icon: '/icon.png'
+        icon: '../icon.png'
     };
     if (Notification.permission === 'granted') {
         navigator.serviceWorker.ready.then(regis => {
