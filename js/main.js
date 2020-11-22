@@ -155,7 +155,7 @@ let showStandings = ()=>{
                 `;
             })
 
-            document.getElementById('title').innerHTML = 'Premier League - Standings';
+            document.getElementById('title').innerHTML = 'Competitions';
             document.getElementById('main-content').innerHTML = dataHTML;
             hideLoader();
         })
