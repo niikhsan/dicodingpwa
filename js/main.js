@@ -181,9 +181,9 @@ let showSchedule = ()=>{
                             data.matches.forEach(matchTim =>{
                                 html +=`
                                     <div class="col s12 m8 l6">
-                                    <div class="card blue-grey darken-1 z-depth-3">
-                                        <div class="card-content white-text">
-                                        <span class="card-title center-align red darken-1">${matchTim.group}</span>
+                                    <div class="card z-depth-3">
+                                        <div class="card-content">
+                                        <span class="card-title center-align red darken-1 white-text">${matchTim.group}</span>
                                             <table class="centered highlight">
                                                 <thead>
                                                     <tr>
@@ -197,7 +197,7 @@ let showSchedule = ()=>{
                                                 <tbody>
                                                     <tr>
                                                         <td>${limit(matchTim.homeTeam.name)}</td>
-                                                        <td>${matchTim.score.fullTime.awayTeam}</td>
+                                                        <td>${matchTim.score.fullTime.homeTeam}</td>
                                                         <td>VS</td>
                                                         <td>${matchTim.score.fullTime.awayTeam}</td>
                                                         <td>${limit(matchTim.awayTeam.name)}</td>
@@ -206,8 +206,8 @@ let showSchedule = ()=>{
                                             </table>
                                             </div>
                                             <div class="card-action">
-                                            <a href="#" class="left-align">This is a link</a>
-                                            <a class="btn-add btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
+                                            <span class="new badge-blue">${matchTim.status}</span>
+                                            <a onclick="savMatch('${matchTim.id}')" title="Simpan hasil pertandingan" class="btn-add btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
                                             </div>
                                         </div>
                                     </div>
@@ -235,9 +235,9 @@ let showSchedule = ()=>{
             data.matches.forEach(matchTim =>{
                 html +=`
                     <div class="col s12 m8 l6">
-                    <div class="card blue-grey darken-1 z-depth-3">
-                        <div class="card-content white-text">
-                        <span class="card-title center-align red darken-1">${matchTim.group}</span>
+                    <div class="card z-depth-3">
+                        <div class="card-content">
+                        <span class="card-title center-align red darken-1 white-text">${matchTim.group}</span>
                             <table class="centered highlight">
                                 <thead>
                                     <tr>
@@ -251,7 +251,7 @@ let showSchedule = ()=>{
                                 <tbody>
                                     <tr>
                                         <td>${limit(matchTim.homeTeam.name)}</td>
-                                        <td>${matchTim.score.fullTime.awayTeam}</td>
+                                        <td>${matchTim.score.fullTime.homeTeam}</td>
                                         <td>VS</td>
                                         <td>${matchTim.score.fullTime.awayTeam}</td>
                                         <td>${limit(matchTim.awayTeam.name)}</td>
@@ -260,8 +260,8 @@ let showSchedule = ()=>{
                             </table>
                             </div>
                             <div class="card-action">
-                            <a href="#" class="left-align">This is a link</a>
-                            <a class="btn-add btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
+                            <span class="new badge-blue">${matchTim.status}</span>
+                            <a onclick="savMatch('${matchTim.id},${matchTim.group},${matchTim.status},${matchTim.homeTeam.name},${matchTim.awayTeam.name},${matchTim.score.fullTime.awayTeam},${matchTim.score.fullTime.homeTeam}')" title="Simpan hasil pertandingan" class="btn-add btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
                             </div>
                         </div>
                     </div>
@@ -280,12 +280,64 @@ let showSchedule = ()=>{
 
 }
 
-let favSchedule = ()=>{
-
+let favMatch = ()=>{
+    showLoader();
+    let mat = savMatch();
+    mat.then(data=>{
+        console.log(data);
+    })
 }
 
-let dbPromise = idb.open('pwafootball', 1, upgradeDB => {
-    if(!upgradeDB.objectStoreNames.contains('match')){
-        upgradeDB.createObjectStore('match')
+let dbf = idb.open('pwafootball', 1, upgradeDB => {
+    if(!upgradeDB.objectStoreNames.contains('matches')){
+        upgradeDB.createObjectStore('matches')
     }
 });
+
+let savMatch = ({id,group,status,homeTim,awayTim,scoreHome,scoreAway})=>{
+    dbf.then(db=>{
+        let tx = db.transaction('matches','readwrite');
+        let store = tx.objectStore('matches')
+        let item ={
+            id:id,
+            group:group,
+            status:status,
+            homeTim:homeTim,
+            awayTim:awayTim,
+            scoreAway:scoreAway,
+            scoreHome:scoreHome
+        };
+        store.put(item,id);
+        return tx.complete;
+    })
+        .then(()=> {
+            M.toast({html: `Pertandingan berhasil disimpan!`, classes:`rounded`})
+            pushNotification(`Hasil pertandingan berhasil disimpan`);
+        }).catch(()=>{
+        M.toast({html: `Gagal Menyimpan Hasil Pertandingan`, classes:`rounded`})
+            pushNotification(`Gagal Menyimpan Hasil Pertandingan`);
+        })
+}
+
+let getMatches=()=>{
+    dbf.then(db=>{
+        let tx = db.transaction('matches','readonly');
+        let store = tx.objectStore('matches');
+        return store.getAll();
+    }).then((items)=>{
+        console.log('Mengambil data');
+    });
+}
+
+const pushNotification = msg => {
+    const title = 'Notifikasi';
+    const options = {
+        body: msg,
+        icon: '/icon.png'
+    };
+    if (Notification.permission === 'granted') {
+        navigator.serviceWorker.ready.then(regis => {
+            regis.showNotification(title, options);
+        });
+    }
+}

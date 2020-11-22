@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f3e51181-0ede-4aa0-bdd4-9014d3962325" name="Default Changelist" comment="" />
+    <list default="true" id="f3e51181-0ede-4aa0-bdd4-9014d3962325" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/nav.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/nav.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nav.html" beforeDir="false" afterPath="$PROJECT_DIR$/nav.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -9,6 +14,9 @@
   </component>
   <component name="ComposerSettings">
     <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1kU8oFhuHt01aLmZyHqljDMDG25" />
   <component name="ProjectViewState">
@@ -18,7 +26,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../clinic_pwa" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../football-pwa" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -41,7 +49,8 @@
       <workItem from="1605880993851" duration="21204000" />
       <workItem from="1605915234622" duration="3230000" />
       <workItem from="1605923195800" duration="12235000" />
-      <workItem from="1605969086365" duration="10305000" />
+      <workItem from="1605969086365" duration="17072000" />
+      <workItem from="1606006046430" duration="2549000" />
     </task>
     <servers />
   </component>
@@ -49,9 +58,9 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="463" y="119" key="FileChooserDialogImpl" timestamp="1605889751876">
+    <state x="463" y="119" key="FileChooserDialogImpl" timestamp="1606007586208">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="463" y="119" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1605889751876" />
+    <state x="463" y="119" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1606007586208" />
   </component>
 </project>

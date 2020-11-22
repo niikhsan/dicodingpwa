@@ -47,8 +47,8 @@ document.addEventListener("DOMContentLoaded", function() {
             showSchedule();
             break;
 
-            case 'favorite-schedule':
-            favSchedule();
+            case 'favorite-match':
+            favMatch();
             break;
         }
     }
