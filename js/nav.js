@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
             showStandings();
             break;
 
-            case 'schedule':
+            case 'match':
             showSchedule();
             break;
 

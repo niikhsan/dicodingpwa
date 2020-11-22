@@ -207,7 +207,7 @@ let showSchedule = ()=>{
                                             </div>
                                             <div class="card-action">
                                             <span class="new badge-blue">${matchTim.status}</span>
-                                            <a onclick="savMatch('${matchTim.id}')" title="Simpan hasil pertandingan" class="btn-add btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
+                                            <a onclick="savMatch(${matchTim.id},'${matchTim.group}','${matchTim.status}','${limit(matchTim.homeTeam.name)}','${limit(matchTim.awayTeam.name)}','${matchTim.score.fullTime.homeTeam}','${matchTim.score.fullTime.awayTeam}')" title="Simpan hasil pertandingan" class="btn-add btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">thumb_up</i></a>
                                             </div>
                                         </div>
                                     </div>
@@ -261,7 +261,7 @@ let showSchedule = ()=>{
                             </div>
                             <div class="card-action">
                             <span class="new badge-blue">${matchTim.status}</span>
-                            <a onclick="savMatch('${matchTim.id},${matchTim.group},${matchTim.status},${matchTim.homeTeam.name},${matchTim.awayTeam.name},${matchTim.score.fullTime.awayTeam},${matchTim.score.fullTime.homeTeam}')" title="Simpan hasil pertandingan" class="btn-add btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
+                            <a onclick="savMatch(${matchTim.id},'${matchTim.group}','${matchTim.status}','${limit(matchTim.homeTeam.name)}','${limit(matchTim.awayTeam.name)}','${matchTim.score.fullTime.homeTeam}','${matchTim.score.fullTime.awayTeam}')" title="Simpan hasil pertandingan" class="btn-add btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">thumb_up</i></a>
                             </div>
                         </div>
                     </div>
@@ -281,52 +281,116 @@ let showSchedule = ()=>{
 }
 
 let favMatch = ()=>{
-    showLoader();
-    let mat = savMatch();
-    mat.then(data=>{
-        console.log(data);
+    // showLoader();
+    let myMatch = getMatches();
+    myMatch.then(data=> {
+        let myHTML = '';
+        data.forEach(myTim => {
+            myHTML += `
+                    <div class="col s12 m8 l6">
+                    <div class="card z-depth-3">
+                        <div class="card-content">
+                        <span class="card-title center-align red darken-1 white-text">${myTim.group}</span>
+                            <table class="centered highlight">
+                                <thead>
+                                    <tr>
+                                        <th>Home</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th>Away</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>${limit(myTim.homeTim)}</td>
+                                        <td>${myTim.scoreHome}</td>
+                                        <td>VS</td>
+                                        <td>${myTim.scoreAway}</td>
+                                        <td>${limit(myTim.awayTim)}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <div class="card-action">
+                            <span class="new badge-blue">${myTim.status}</span>
+                            <a onclick="deleteMatch(${myTim.id})" title="Hapus hasil pertandingan" class="btn-add btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">delete</i></a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        })
+        let favHTML ='';
+        if(data.length == 0) {
+            favHTML +=`
+            <div class="row mt-50">
+                <h3 class="center-align">No Favorite Match :( </h3>
+            </div>
+            `;
+        }else{
+            favHTML +=`
+            <div class="row mt-50">${myHTML}</div>
+            `;
+        }
+        document.getElementById('title').innerHTML = 'Favorite Match';
+        document.getElementById('main-content').innerHTML = favHTML;
+        //hideLoader();
     })
 }
 
-let dbf = idb.open('pwafootball', 1, upgradeDB => {
-    if(!upgradeDB.objectStoreNames.contains('matches')){
-        upgradeDB.createObjectStore('matches')
+let dbf = idb.open('pwafootball', 1, upgradeDb => {
+    if(!upgradeDb.objectStoreNames.contains('matches')){
+        upgradeDb.createObjectStore('matches')
     }
 });
-
-let savMatch = ({id,group,status,homeTim,awayTim,scoreHome,scoreAway})=>{
+let savMatch = (id,group,status,homeTim,awayTim,scoreHome,scoreAway)=>{
     dbf.then(db=>{
         let tx = db.transaction('matches','readwrite');
-        let store = tx.objectStore('matches')
-        let item ={
+        let store = tx.objectStore('matches');
+        let item = {
             id:id,
             group:group,
             status:status,
             homeTim:homeTim,
             awayTim:awayTim,
+            scoreHome:scoreHome,
             scoreAway:scoreAway,
-            scoreHome:scoreHome
-        };
-        store.put(item,id);
+            createdAt: new Date().getTime()
+        }
+        store.put(item,123456789);
         return tx.complete;
+    }).then(()=>{
+        M.toast({html: `Pertandingan ${homeTim} VS ${awayTim} berhasil disimpan!`, classes:`rounded`})
+            pushNotification(`Hasil pertandingan ${homeTim} VS ${awayTim} berhasil disimpan`);
+         }).catch(()=>{
+         M.toast({html: `Gagal Menyimpan Hasil Pertandingan ${homeTim} VS ${awayTim}`, classes:`rounded`})
+        pushNotification(`Gagal Menyimpan Hasil Pertandingan ${homeTim} VS ${awayTim}`);
     })
-        .then(()=> {
-            M.toast({html: `Pertandingan berhasil disimpan!`, classes:`rounded`})
-            pushNotification(`Hasil pertandingan berhasil disimpan`);
-        }).catch(()=>{
-        M.toast({html: `Gagal Menyimpan Hasil Pertandingan`, classes:`rounded`})
-            pushNotification(`Gagal Menyimpan Hasil Pertandingan`);
-        })
 }
 
 let getMatches=()=>{
-    dbf.then(db=>{
+    return dbf.then(db=>{
         let tx = db.transaction('matches','readonly');
         let store = tx.objectStore('matches');
         return store.getAll();
-    }).then((items)=>{
-        console.log('Mengambil data');
-    });
+    })
+}
+
+let deleteMatch = (id)=> {
+    let del = confirm(`Apakah Anda Yakin ingin menghapus pertandingan dari Favorite Match ?`);
+    if (del) {
+        dbf.then(db => {
+            let tx = db.transaction('matches', 'readwrite');
+            let store = tx.objectStore('matches');
+            store.delete(id);
+            return tx.complete;
+        }).then(() => {
+            M.toast({html: 'Berhasil Menghapus pertandingan!', classes:'rounded'});
+            favMatch();
+        }).catch(err => {
+            console.error('Error: ', err);
+        })
+    }
 }
 
 const pushNotification = msg => {

@@ -1,4 +1,4 @@
-const API_KEY = 'd327b3f79ad54560ac84595be3610b21';
+const API_KEY = '02481c1bcf234328a97af1232afdf044';
 const liga_ID = 2001;
 let base_url = "https://api.football-data.org/v2/";
 let standingHome = `${base_url}competitions/${liga_ID}/standings?standingType=HOME`;
