@@ -281,7 +281,7 @@ let showSchedule = ()=>{
 }
 
 let favMatch = ()=>{
-    // showLoader();
+    showLoader();
     let myMatch = getMatches();
     myMatch.then(data=> {
         let myHTML = '';
@@ -303,18 +303,18 @@ let favMatch = ()=>{
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>${limit(myTim.homeTim)}</td>
+                                        <td>${myTim.homeTim}</td>
                                         <td>${myTim.scoreHome}</td>
                                         <td>VS</td>
                                         <td>${myTim.scoreAway}</td>
-                                        <td>${limit(myTim.awayTim)}</td>
+                                        <td>${myTim.awayTim}</td>
                                     </tr>
                                 </tbody>
                             </table>
                             </div>
                             <div class="card-action">
                             <span class="new badge-blue">${myTim.status}</span>
-                            <a onclick="deleteMatch(${myTim.id})" title="Hapus hasil pertandingan" class="btn-add btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">delete</i></a>
+                            <a onclick="deleteMatch(${myTim.id},'${myTim.group}','${myTim.status}','${myTim.homeTim}','${myTim.awayTim}','${myTim.scoreHome}','${myTim.scoreAway}')" title="Hapus hasil pertandingan" class="btn-add btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">delete</i></a>
                             </div>
                         </div>
                     </div>
@@ -334,7 +334,7 @@ let favMatch = ()=>{
         }
         document.getElementById('title').innerHTML = 'Favorite Match';
         document.getElementById('main-content').innerHTML = favHTML;
-        //hideLoader();
+        hideLoader();
     })
 }
 
@@ -357,7 +357,7 @@ let savMatch = (id,group,status,homeTim,awayTim,scoreHome,scoreAway)=>{
             scoreAway:scoreAway,
             createdAt: new Date().getTime()
         }
-        store.put(item,123456789);
+        store.put(item,id);
         return tx.complete;
     }).then(()=>{
         M.toast({html: `Pertandingan ${homeTim} VS ${awayTim} berhasil disimpan!`, classes:`rounded`})
@@ -376,7 +376,7 @@ let getMatches=()=>{
     })
 }
 
-let deleteMatch = (id)=> {
+let deleteMatch = (id,group,status,homeTim,awayTim,scoreHome,scoreAway)=> {
     let del = confirm(`Apakah Anda Yakin ingin menghapus pertandingan dari Favorite Match ?`);
     if (del) {
         dbf.then(db => {
@@ -385,8 +385,8 @@ let deleteMatch = (id)=> {
             store.delete(id);
             return tx.complete;
         }).then(() => {
-            M.toast({html: 'Berhasil Menghapus pertandingan!', classes:'rounded'});
             favMatch();
+            M.toast({html: 'Berhasil Menghapus pertandingan!', classes:'rounded'});
         }).catch(err => {
             console.error('Error: ', err);
         })
@@ -397,7 +397,7 @@ const pushNotification = msg => {
     const title = 'Notifikasi';
     const options = {
         body: msg,
-        icon: '../icon.png'
+        icon: 'icon.png'
     };
     if (Notification.permission === 'granted') {
         navigator.serviceWorker.ready.then(regis => {
