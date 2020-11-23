@@ -2,7 +2,7 @@
     "name": "PWA Football Club",
     "short_name": "PWA FC",
     "description": "PWA Football Club is football club from dicoding football academy.",
-    "start_url": "/index.html",
+    "start_url": "index.html",
     "display": "standalone",
     "background_color": "#ff5722",
     "theme_color": "#ff7043 ",
